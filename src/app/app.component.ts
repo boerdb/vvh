@@ -28,7 +28,7 @@ import {
 <ion-app>
   <ion-split-pane contentId="main-content">
 
-    <ion-menu contentId="main-content" type="reveal">
+    <ion-menu contentId="main-content" type="overlay">
       <ion-header>
         <ion-toolbar color="primary">
           <ion-title>Menu</ion-title>

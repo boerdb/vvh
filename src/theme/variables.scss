@@ -1,2 +1,14 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+
+:root {
+  /**
+  * Light Theme
+  * -------------------------------------------
+  * Any CSS variables that should be modified for the light
+  * theme should go here.
+  */
+
+  --ion-toolbar-background: #ffffff;
+  --ion-toolbar-color: #000000;
+}
