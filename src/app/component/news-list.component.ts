@@ -29,7 +29,9 @@ import { Observable } from 'rxjs';
 
           <ion-card-header>
             <ion-card-title>{{ item.title }}</ion-card-title>
-            <ion-card-subtitle>{{ item.date | date:'dd MMM, yyyy' }}</ion-card-subtitle>
+            <ion-card-subtitle>
+              {{ (item.date || item.datum) | date:'dd MMM, yyyy' }}
+            </ion-card-subtitle>
           </ion-card-header>
 
           <ion-card-content>
