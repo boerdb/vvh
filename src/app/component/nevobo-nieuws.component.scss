@@ -1,0 +1,80 @@
+.nevobo-nieuws-container {
+  padding: 0 0.5rem 2rem 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.section-title {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+}
+
+ion-card.nevobo-nieuws-card {
+  --background: #e3f2fd;
+  --border-radius: 14px;
+  --box-shadow: 0 4px 16px 0 rgba(25, 118, 210, 0.10);
+  margin-bottom: 20px;
+  border: 1.5px solid #bbdefb;
+}
+
+ion-card-title {
+  --color: #1976d2;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+ion-card-subtitle {
+  --color: #ffb300;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.nevobo-nieuws-description {
+  font-size: 0.98rem;
+  color: #333;
+  background: #fffde7;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 4px;
+  font-family: 'Inter', 'Roboto', 'Open Sans', Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+ion-button {
+  --background: #1976d2;
+  --color: white;
+  margin-top: 10px;
+}
+
+/* Forceer lichte kaart en tekst, ook in dark mode */
+:host-context(.dark) ion-card.nevobo-nieuws-card {
+  --background: #e3f2fd !important;
+  border: 1.5px solid #bbdefb !important;
+}
+:host-context(.dark) ion-card-title {
+  --color: #1976d2 !important;
+  color: #1976d2 !important;
+}
+:host-context(.dark) ion-card-subtitle {
+  --color: #ffb300 !important;
+  color: #ffb300 !important;
+}
+:host-context(.dark) .nevobo-nieuws-description {
+  background: #fffde7 !important;
+  color: #333 !important;
+}
+:host-context(.dark) .section-title {
+  color: #fff !important;
+}
+
+
+/* In de styles van je component */
+.nevobo-nieuws-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 5; /* Toon maximaal 5 regels, zelfs als er 150 woorden zijn */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 10px;
+}

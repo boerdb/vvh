@@ -1,3 +1,12 @@
+/* Copyright footer onderaan menu */
+.copyright-footer {
+  text-align: center;
+  color: #b0b0b0;
+  font-size: 0.95em;
+  margin-top: 32px;
+  margin-bottom: 8px;
+  width: 100%;
+}
 ion-menu ion-content {
   --background: var(--ion-item-background, var(--ion-background-color, #fff));
 }
