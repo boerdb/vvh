@@ -1,3 +1,14 @@
+/* Footer onderaan hoofdscherm */
+.main-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2.5rem 0 1.5rem 0;
+  font-size: 0.95rem;
+  color: var(--ion-color-medium);
+  gap: 0.2rem;
+}
 /* Header centreren en logo rechts */
 .centered-title {
   width: 100%;

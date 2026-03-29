@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  version: '0.0.1',
+  copyright: '© 2026 Clinical Vision, alle rechten voorbehouden.'
 };
 
 /*

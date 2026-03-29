@@ -21,5 +21,9 @@ export const routes: Routes = [
   {
     path: 'waddenhal',
     loadComponent: () => import('./component/waddenhal-programma.component').then(m => m.WaddenhalProgrammaComponent),
+  },
+  {
+    path: 'info',
+    loadComponent: () => import('./component/info.component').then(m => m.InfoComponent),
   }
 ];

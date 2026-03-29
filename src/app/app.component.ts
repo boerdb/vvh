@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
@@ -85,8 +86,11 @@ export class AppComponent implements OnInit {
     { title: 'Clubnieuws', url: '/news', icon: 'newspaper-outline' },
     { title: 'Nevobo Nieuws', url: '/nevobo-nieuws', icon: 'volleyball-outline' },
     { title: 'Programma', url: '/programma', icon: 'calendar-outline' },
-    { title: 'Thuis Wedstrijden', url: '/waddenhal', icon: 'business-outline' }
+    { title: 'Thuis Wedstrijden', url: '/waddenhal', icon: 'business-outline' },
+    { title: 'Info', url: '/info', icon: 'globe-outline' }
   ];
+
+  environment = environment;
 
   constructor() {
     // Centrale Icon Registry [cite: 2026-01-09]
