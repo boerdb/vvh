@@ -11,7 +11,7 @@ import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, 
   template: `
     <ion-content class="ion-padding">
       <div class="programma-container">
-        <h2 class="section-title">Nu in de Waddenhal</h2>
+        <h2 class="section-title">Thuis Wedstrijden</h2>
         <ion-card *ngFor="let wedstrijd of programma$ | async" class="match-card">
           <ion-card-header>
             <ion-card-title>{{ wedstrijd.titel }}</ion-card-title>

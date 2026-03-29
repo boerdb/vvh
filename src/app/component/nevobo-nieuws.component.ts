@@ -3,34 +3,35 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { AsyncPipe, NgFor, NgIf, DatePipe } from '@angular/common';
-import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonContent, IonButton } from '@ionic/angular/standalone';
+import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonContent, IonButton, IonHeader, IonToolbar, IonTitle } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-nevobo-nieuws',
   standalone: true,
   imports: [AsyncPipe, NgFor, NgIf, DatePipe, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonContent, IonButton],
   template: `
-    <ion-content class="nevobo-nieuws-container ion-padding">
-      <h2 class="section-title">Nevobo Nieuws</h2>
+    <ion-content class="ion-padding">
+      <div class="programma-container"> <h2 class="section-title">Nevobo Nieuws</h2>
 
-      <ion-card *ngIf="(nieuws$ | async)?.length === 0" class="nevobo-nieuws-card">
-        <ion-card-content>Geen nieuws gevonden op dit moment.</ion-card-content>
-      </ion-card>
+        <ion-card *ngIf="(nieuws$ | async)?.length === 0" class="match-card">
+          <ion-card-content>Geen nieuws gevonden op dit moment.</ion-card-content>
+        </ion-card>
 
-      <ion-card *ngFor="let item of nieuws$ | async" class="nevobo-nieuws-card">
-        <ion-card-header>
-          <ion-card-title>{{ item.titel }}</ion-card-title>
-          <ion-card-subtitle>{{ item.datum | date:'dd-MM-yyyy HH:mm' }}</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="nevobo-nieuws-description" [innerHTML]="item.omschrijving"></div>
-          <ion-button [disabled]="!item.link" [href]="item.link || '#'" target="_blank" fill="clear">
-            Lees meer
-          </ion-button>
-        </ion-card-content>
-      </ion-card>
+        <ion-card *ngFor="let item of nieuws$ | async" class="match-card"> <ion-card-header>
+            <ion-card-title>{{ item.titel }}</ion-card-title>
+            <ion-card-subtitle>{{ item.datum | date:'dd-MM-yyyy HH:mm' }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="match-description" [innerHTML]="item.omschrijving"></div>
+            <ion-button [disabled]="!item.link" [href]="item.link || '#'" target="_blank" expand="block">
+              Lees meer
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </div>
     </ion-content>
-  `
+  `,
+  styleUrls: ['./programma.component.scss']
 })
 export class NevoboNieuwsComponent {
   private http = inject(HttpClient);

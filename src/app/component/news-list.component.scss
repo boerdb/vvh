@@ -1,6 +1,8 @@
+// Zorg voor extra ruimte onder de header
 .news-feed {
   padding: 16px;
   background: var(--background);
+  margin-top: 2.5rem;
 
   ion-card.news-card {
     --background: var(--ion-color-light);
@@ -38,10 +40,10 @@
         letter-spacing: 0.5px;
         color: var(--ion-color-warning);
     }
-    
+
     ion-card-content {
       padding: 15px;
-      
+
       p {
         color: var(--ion-color-dark);
         font-size: 0.9rem;
@@ -58,4 +60,12 @@
   padding: 20px;
   font-size: 1.2rem;
   color: var(--ion-color-primary);
+}
+
+.section-title {
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
 }

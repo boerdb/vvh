@@ -1,3 +1,24 @@
+/* Header centreren en logo rechts */
+.centered-title {
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+  font-weight: 600;
+}
+
+.header-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.header-logo {
+  height: 36px;
+  width: auto;
+  margin-right: 8px;
+  filter: grayscale(0.2) brightness(0.95);
+}
 /* Copyright footer onderaan menu */
 .copyright-footer {
   text-align: center;

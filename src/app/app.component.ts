@@ -63,7 +63,10 @@ import {
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
-          <ion-title>VVH Harlingen</ion-title>
+          <ion-title class="centered-title">VVH Harlingen</ion-title>
+          <div slot="end" class="header-logo-container">
+            <img src="assets/icons/logo-vvh.png" alt="VVH Logo" class="header-logo" />
+          </div>
         </ion-toolbar>
       </ion-header>
       <ion-router-outlet></ion-router-outlet>
@@ -82,7 +85,7 @@ export class AppComponent implements OnInit {
     { title: 'Clubnieuws', url: '/news', icon: 'newspaper-outline' },
     { title: 'Nevobo Nieuws', url: '/nevobo-nieuws', icon: 'volleyball-outline' },
     { title: 'Programma', url: '/programma', icon: 'calendar-outline' },
-    { title: 'De Waddenhal', url: '/waddenhal', icon: 'business-outline' }
+    { title: 'Thuis Wedstrijden', url: '/waddenhal', icon: 'business-outline' }
   ];
 
   constructor() {

@@ -1,47 +1,60 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgFor, NgIf, DatePipe, AsyncPipe } from '@angular/common';
 import { NewsService } from '../services/news.service';
-import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSpinner, IonContent } from '@ionic/angular/standalone';
+import {
+  IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle,
+  IonCardContent, IonSpinner, IonContent, IonButton, IonImg
+} from '@ionic/angular/standalone';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-news-list',
   standalone: true,
-  imports: [CommonModule, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSpinner, IonContent],
+  imports: [
+    CommonModule, NgFor, NgIf, DatePipe, AsyncPipe,
+    IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle,
+    IonCardContent, IonContent, IonButton, IonImg, IonSpinner
+  ],
   template: `
     <ion-content class="ion-padding">
-      <section class="news-feed">
-        <h3 class="section-title">Laatste Nieuws</h3>
+      <div class="programma-container">
+        <h2 class="section-title">Laatste Nieuws</h2>
 
-        <ion-card *ngFor="let item of news$ | async"
-                  class="news-card fade-in"
-                  (click)="openArticle(item.link)">
+        <div *ngIf="!(news$ | async)" class="ion-text-center ion-padding">
+          <ion-spinner name="crescent"></ion-spinner>
+        </div>
 
-          <img *ngIf="item.image" [src]="item.image" class="news-img" alt="">
+        <ion-card *ngFor="let item of news$ | async" class="match-card">
+          <ion-img *ngIf="item.image" [src]="item.image" class="news-img"></ion-img>
 
           <ion-card-header>
-              <ion-card-title>{{ item.titel }}</ion-card-title>
-              <ion-card-subtitle>{{ item.datum | date:'mediumDate' }}</ion-card-subtitle>
+            <ion-card-title>{{ item.title }}</ion-card-title>
+            <ion-card-subtitle>{{ item.date | date:'dd MMM, yyyy' }}</ion-card-subtitle>
           </ion-card-header>
+
           <ion-card-content>
-            <div [innerHTML]="item.omschrijving"></div>
-            <span class="read-more">Lees meer →</span>
+            <div class="match-description" [innerHTML]="item.summary || item.omschrijving">
+            </div>
+
+            <ion-button expand="block" (click)="openArticle(item.link)">
+              Lees meer →
+            </ion-button>
           </ion-card-content>
         </ion-card>
-
-        <div *ngIf="!(news$ | async)" class="loading-state">
-          <ion-spinner></ion-spinner>
-          <p>Nieuws laden...</p>
-        </div>
-      </section>
+      </div>
     </ion-content>
   `,
-  styleUrls: ['./news-list.component.scss']
+  styleUrls: ['./programma.component.scss']
 })
 export class NewsListComponent {
   private newsService = inject(NewsService);
-  news$ = this.newsService.getNews();
+
+  // Gebruik de observable voor automatische updates
+  news$: Observable<any[]> = this.newsService.getNews();
 
   openArticle(url: string) {
-    if (url) window.open(url, '_blank');
+    if (url) {
+      window.open(url, '_blank');
+    }
   }
 }

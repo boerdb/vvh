@@ -1,14 +1,24 @@
 .nevobo-nieuws-container {
   padding: 0 0.5rem 2rem 0.5rem;
-  margin-top: 1.5rem;
+  margin-top: 3.5rem;
 }
 
 .section-title {
-  color: #ffffff;
+  color: #1976d2;
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
   letter-spacing: 1px;
+  text-align: center;
+}
+
+:host-context(ion-header) .section-title,
+ion-header .section-title {
+  color: #1976d2 !important;
+}
+
+:host-context(.dark) ion-header .section-title {
+  color: #fff !important;
 }
 
 ion-card.nevobo-nieuws-card {
