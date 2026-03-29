@@ -1,0 +1,7 @@
+{
+  "name": "vvh-new",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
