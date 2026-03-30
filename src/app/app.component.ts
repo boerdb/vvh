@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter } from 'rxjs';
@@ -12,7 +12,8 @@ import {
 import { addIcons } from 'ionicons';
 import {
   newspaperOutline, trophyOutline, calendarOutline,
-  businessOutline, globeOutline, downloadOutline
+  businessOutline, globeOutline, downloadOutline, peopleOutline,
+  chevronDownOutline, chevronForwardOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -39,12 +40,30 @@ import {
         <ion-list id="menu-list">
           <ion-note class="ion-padding-start">VVH HARLINGEN</ion-note>
 
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" routerLinkActive="selected" detail="false" lines="none">
-              <ion-icon aria-hidden="true" slot="start" [name]="p.icon"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
+          <ng-container *ngFor="let p of appPages">
+            <ion-menu-toggle auto-hide="false" *ngIf="!p.submenu">
+              <ion-item [routerLink]="p.url" routerLinkActive="selected" detail="false" lines="none">
+                <ion-icon [name]="p.icon" slot="start"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+
+            <ng-container *ngIf="p.submenu">
+              <ion-item (click)="toggleTeams()" detail="false" lines="none" button>
+                <ion-icon [name]="p.icon" slot="start"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+                <ion-icon [name]="showTeams ? 'chevron-down-outline' : 'chevron-forward-outline'" slot="end"></ion-icon>
+              </ion-item>
+
+              <ion-list class="submenu-list" *ngIf="showTeams">
+                <ion-menu-toggle auto-hide="false" *ngFor="let team of p.submenu">
+                  <ion-item [routerLink]="['/team', team.code]" routerLinkActive="selected" lines="none" detail="false">
+                    <ion-label class="submenu-label">{{ team.label }}</ion-label>
+                  </ion-item>
+                </ion-menu-toggle>
+              </ion-list>
+            </ng-container>
+          </ng-container>
         </ion-list>
       </ion-content>
 
@@ -80,48 +99,70 @@ import {
 })
 export class AppComponent implements OnInit {
   private swUpdate = inject(SwUpdate);
-  installPrompt = signal<any>(null);
+  private router = inject(Router); // Injecteer de router
+
+  public environment = environment;
+  public installPrompt = signal<any>(null);
+  public showTeams = false;
 
   public appPages = [
     { title: 'Clubnieuws', url: '/news', icon: 'newspaper-outline' },
-    { title: 'Nevobo Nieuws', url: '/nevobo-nieuws', icon: 'volleyball-outline' },
+    { title: 'Nevobo Nieuws', url: '/nevobo-nieuws', icon: 'trophy-outline' },
     { title: 'Programma', url: '/programma', icon: 'calendar-outline' },
     { title: 'Thuis Wedstrijden', url: '/waddenhal', icon: 'business-outline' },
+    { title: 'Uitslagen', url: '/teams', icon: 'people-outline', submenu: [
+      { code: 'HS1', label: 'Heren 1' },
+      { code: 'HS2', label: 'Heren 2' },
+      { code: 'DS1', label: 'Dames 1' },
+      { code: 'DS2', label: 'Dames 2' },
+      { code: 'XB1', label: 'Mix B1' },
+      { code: 'MA1', label: 'Meisjes A1' },
+      { code: 'MC1', label: 'Meisjes C1' }
+    ] },
     { title: 'Info', url: '/info', icon: 'globe-outline' }
   ];
 
-  environment = environment;
-
   constructor() {
-    // Centrale Icon Registry [cite: 2026-01-09]
+    // Luister naar navigatie: klap submenu in zodra de pagina wijzigt
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.showTeams = false;
+    });
+
     addIcons({
       'newspaper-outline': newspaperOutline,
-      'volleyball-outline': trophyOutline, // Volleyball heeft geen outline variant
+      'trophy-outline': trophyOutline,
       'calendar-outline': calendarOutline,
       'business-outline': businessOutline,
       'globe-outline': globeOutline,
-      'download-outline': downloadOutline
+      'download-outline': downloadOutline,
+      'people-outline': peopleOutline,
+      'chevron-down-outline': chevronDownOutline,
+      'chevron-forward-outline': chevronForwardOutline
     });
   }
 
-  ngOnInit() {
-    // Check voor PWA updates
+  ngOnInit(): void {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.versionUpdates
-        .pipe(filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'))
+        .pipe(filter((evt: any): evt is VersionReadyEvent => evt.type === 'VERSION_READY'))
         .subscribe(() => {
-          if (confirm("Nieuwe versie beschikbaar. Herladen?")) window.location.reload();
+          if (confirm("Nieuwe update beschikbaar. Herladen?")) window.location.reload();
         });
     }
 
-    // Luister naar installatie prompt
-    window.addEventListener('beforeinstallprompt', (e) => {
+    window.addEventListener('beforeinstallprompt', (e: any) => {
       e.preventDefault();
       this.installPrompt.set(e);
     });
   }
 
-  installApp() {
+  toggleTeams() {
+    this.showTeams = !this.showTeams;
+  }
+
+  installApp(): void {
     const prompt = this.installPrompt();
     if (prompt) {
       prompt.prompt();

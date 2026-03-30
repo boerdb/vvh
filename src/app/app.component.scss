@@ -1,3 +1,4 @@
+/* geen relatieve positionering meer */
 /* Footer onderaan hoofdscherm */
 .main-footer {
   display: flex;
@@ -39,9 +40,46 @@
   margin-bottom: 8px;
   width: 100%;
 }
-ion-menu ion-content {
-  --background: var(--ion-item-background, var(--ion-background-color, #fff));
+
+ion-menu {
+  --background: #181818;
 }
+
+ion-menu ion-content {
+  --background: #181818;
+  height: 100%;
+}
+
+ion-footer.ion-no-border {
+  --background: #181818 !important;
+  background: #181818 !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  box-shadow: none;
+  color: #fff;
+}
+
+ion-menu ion-footer {
+  --background: #181818 !important;
+  background: #181818 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+ion-menu ion-footer ion-toolbar {
+  --background: #181818 !important;
+  background: #181818 !important;
+  --ion-toolbar-background: #181818 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+  ion-menu {
+    --background: #181818;
+  }
+
+  ion-menu::part(backdrop) {
+    background: #181818 !important;
+  }
 
 ion-menu.md ion-content {
   --padding-start: 8px;
@@ -157,4 +195,41 @@ ion-note {
 
 ion-item.selected {
   --color: var(--ion-color-primary);
+}
+
+
+
+
+/* Zorg dat alle lijsten in het menu transparant zijn */
+ion-menu ion-list {
+  background: transparent !important;
+  --background: transparent !important;
+  padding: 0 !important; /* Verwijdert onbedoelde witte randjes */
+}
+
+/* Fix voor de individuele menu-items */
+ion-menu ion-item {
+  --background: transparent !important; /* Voorkomt dat items een eigen kleurvlak hebben */
+  --color: #ffffff; /* Zorg dat de tekst goed leesbaar is op zwart */
+}
+
+
+/* Maak het team-submenu compacter */
+.submenu-list {
+  background: #121212 !important; // Iets donkerder dan het hoofdmenu voor diepte
+  margin-left: 16px;              // Laat het submenu inspringen
+  margin-right: 16px;
+  border-left: 2px solid #333;    // Een subtiel lijntje aan de zijkant
+  border-radius: 0 0 8px 8px;     // Ronde hoekjes onderaan
+  padding: 0 !important;
+
+  ion-item {
+    --min-height: 40px;           // Maak de regels minder hoog
+    --background: transparent !important;
+    font-size: 14px;              // Iets kleinere letters voor de teams
+
+    .submenu-label {
+      margin-left: 10px;          // Extra ruimte voor de tekst
+    }
+  }
 }

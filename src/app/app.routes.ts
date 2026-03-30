@@ -25,5 +25,13 @@ export const routes: Routes = [
   {
     path: 'info',
     loadComponent: () => import('./component/info.component').then(m => m.InfoComponent),
+  },
+  {
+    path: 'teams',
+    loadComponent: () => import('./component/teams.component').then(m => m.TeamsComponent),
+  },
+  {
+    path: 'team/:code',
+    loadComponent: () => import('./component/team-resultaten.component').then(m => m.TeamResultatenComponent),
   }
 ];
