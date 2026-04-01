@@ -1,0 +1,185 @@
+:host {
+  display: block;
+}
+
+ion-content {
+  --background: #ffffff;
+}
+
+.standen-container {
+  margin-top: 3.5rem;
+  padding: 0 0.9rem 2rem;
+  color: #1e2d42;
+}
+
+.standen-header {
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  margin: 0;
+  color: var(--ion-text-color);
+  font-size: clamp(1.7rem, 4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.section-subtitle {
+  margin: 0.4rem 0 1rem;
+  color: #4c627f;
+  font-size: 0.95rem;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.meta-item {
+  background: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 12px;
+  padding: 0.6rem 0.75rem;
+}
+
+.meta-label {
+  display: block;
+  color: #4c627f;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.meta-value {
+  display: block;
+  margin-top: 0.25rem;
+  color: #1976d2;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+ion-card.stand-card {
+  margin: 0;
+  --background: #e3f2fd;
+  --border-radius: 16px;
+  border: 1.5px solid #bbdefb;
+  box-shadow: 0 4px 16px 0 rgba(25, 118, 210, 0.1);
+}
+
+ion-card-content {
+  padding: 1rem;
+}
+
+.stand-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.stand-table thead tr {
+  background: rgba(25, 118, 210, 0.12);
+}
+
+.stand-table th,
+.stand-table td {
+  padding: 0.72rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(25, 118, 210, 0.22);
+  color: #2e405a;
+  vertical-align: top;
+}
+
+.stand-table th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1976d2;
+}
+
+.stand-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.stand-table tbody tr.highlight-vvh {
+  background: #fffde7;
+}
+
+.stand-table tbody tr.highlight-vvh td {
+  color: #16365f;
+  font-weight: 700;
+}
+
+.col-rank {
+  width: 14%;
+}
+
+.col-team {
+  width: 42%;
+}
+
+.stand-table th:nth-child(2),
+.stand-table td:nth-child(2) {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.col-wed,
+.col-ptn,
+.col-sets {
+  width: 14%;
+}
+
+@media (max-width: 700px) {
+  .standen-container {
+    margin-top: 3.5rem;
+    padding: 0 0.55rem 1.25rem;
+  }
+
+  .meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  ion-card-content {
+    padding: 0.5rem;
+  }
+
+  .stand-table th,
+  .stand-table td {
+    padding: 0.56rem 0.3rem;
+    font-size: 0.93rem;
+  }
+
+  .stand-table th {
+    font-size: 0.7rem;
+  }
+
+  .col-rank {
+    width: 12%;
+  }
+
+  .col-team {
+    width: 44%;
+  }
+
+  .col-wed,
+  .col-ptn,
+  .col-sets {
+    width: 14%;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  ion-content {
+    --background: #000000;
+  }
+
+  .standen-container {
+    color: #f5f8ff;
+  }
+
+  .section-subtitle {
+    color: #c7d3ef;
+  }
+}

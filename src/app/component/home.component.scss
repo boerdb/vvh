@@ -1,0 +1,235 @@
+/* --- VVH HOMEPAGE STYLING --- */
+
+/* --- VVH HOMEPAGE STYLING --- */
+
+:root {
+  --vvh-bg-deep: #0b0f19;
+  --vvh-surface-panel: #1a2235;
+  --vvh-bright-white: #ffffff;
+  --vvh-text-muted: #cbd5e1;
+  --vvh-knalgeel: #FFD700;
+  --vvh-accent-blue: #3b82f6;
+  --vvh-match-green: #00E676;
+}
+
+:host {
+  display: block;
+}
+
+ion-content {
+  --background: var(--vvh-bg-deep);
+}
+
+.home-container {
+  padding: calc(env(safe-area-inset-top, 0px) + 0.8rem) 0.75rem 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- HET HAMBURGER MENU IN DE FOTO --- */
+.floating-menu {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 50;
+  --color: #ffffff; /* Zorgt dat het menu wit is en goed opvalt over de foto */
+  background: rgba(0, 0, 0, 0.3); /* Subtiel donker rondje erachter voor leesbaarheid */
+  border-radius: 50%;
+}
+
+/* --- HERO SECTIE (Met jouw foto!) --- */
+.hero {
+  position: relative;
+  min-height: 18rem;
+  border-radius: 20px;
+  overflow: hidden;
+
+  /* Hier laden we jouw foto, met een donkere waas erover zodat de witte tekst leesbaar blijft */
+  background:
+    linear-gradient(150deg, rgba(11, 15, 25, 0.85), rgba(11, 15, 25, 0.4)),
+    url('/assets/hero-vvh.jpg');
+  background-size: cover;
+  background-position: center;
+
+  border: 2px solid var(--vvh-knalgeel);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 25px rgba(255, 215, 0, 0.15);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.hero-overlay {
+  padding: 2.5rem 1.5rem 2rem; /* Iets meer padding bovenin voor het menuutje */
+  color: var(--vvh-bright-white);
+}
+
+/* ... (De rest van je SCSS voor de knoppen en wedstrijden blijft exact zoals in mijn vorige bericht) ... */
+
+.hero-logo {
+  width: 90px;
+  height: 90px;
+  background-color: var(--vvh-knalgeel);
+  border-radius: 50%;
+  margin: 0 auto 15px;
+  padding: 5px;
+  box-shadow: 0 0 20px var(--vvh-knalgeel);
+  border: 3px solid var(--vvh-bright-white);
+  display: block;
+}
+
+.hero-kicker {
+  font-size: 0.85rem;
+  color: var(--vvh-knalgeel);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.hero h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 0 0 10px;
+  color: var(--vvh-bright-white);
+  letter-spacing: -0.5px;
+}
+
+.hero-subtitle {
+  color: var(--vvh-text-muted);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+ion-button.cta-primary {
+  --background: var(--vvh-match-green);
+  --color: #000;
+  font-weight: 700;
+}
+
+ion-button.cta-secondary {
+  --border-color: var(--vvh-knalgeel);
+  --color: var(--vvh-knalgeel);
+  font-weight: 700;
+}
+
+/* --- KOMENDE WEDSTRIJDEN --- */
+.upcoming {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.upcoming h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--vvh-bright-white);
+  margin-top: 0;
+  margin-bottom: 15px;
+  border-left: 4px solid var(--vvh-match-green);
+  padding-left: 10px;
+}
+
+.loading-state {
+  text-align: center;
+  color: var(--vvh-knalgeel);
+  padding: 2rem 0;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+ion-card.match-card {
+  margin: 0;
+  --background: #e3f2fd;
+  --border-radius: 14px;
+  --box-shadow: 0 4px 16px 0 rgba(25, 118, 210, 0.1);
+  border: 1.5px solid #bbdefb;
+}
+
+ion-card.match-card:hover {
+  --box-shadow: 0 10px 32px 0 rgba(25, 118, 210, 0.18), 0 2px 8px 0 rgba(255, 193, 7, 0.15);
+  transform: translateY(-2px) scale(1.01);
+}
+
+ion-card-content {
+  padding: 1rem;
+}
+
+.match-meta {
+  color: #4e6382;
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+}
+
+.match-card h3 {
+  margin: 0 0 5px;
+  color: #1976d2;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.match-card p {
+  margin: 0 0 10px;
+  color: #333;
+}
+
+ion-button.cta-small {
+  --background: rgba(255, 215, 0, 0.1);
+  --color: var(--vvh-knalgeel);
+  --box-shadow: none;
+}
+
+.geen-wedstrijden {
+  color: var(--vvh-text-muted);
+  font-style: italic;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* --- QUICK LINKS --- */
+.quick-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.quick-links a {
+  background: var(--vvh-surface-panel);
+  color: var(--vvh-bright-white);
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.quick-links a:hover, .quick-links a:active {
+  background: rgba(255, 215, 0, 0.1);
+  color: var(--vvh-knalgeel);
+  border-color: var(--vvh-knalgeel);
+  transform: translateY(-2px);
+}
+
+@media (prefers-color-scheme: light) {
+  .hero,
+  .hero .hero-overlay,
+  .hero .hero-overlay h1,
+  .hero .hero-overlay .hero-subtitle {
+    color: #ffffff !important;
+  }
+
+  .hero .hero-overlay .hero-kicker {
+    color: #ffd700 !important;
+  }
+}

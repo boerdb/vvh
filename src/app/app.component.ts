@@ -13,8 +13,10 @@ import { addIcons } from 'ionicons';
 import {
   newspaperOutline, trophyOutline, calendarOutline,
   businessOutline, globeOutline, downloadOutline, peopleOutline,
-  chevronDownOutline, chevronForwardOutline
+  chevronDownOutline, chevronForwardOutline, homeOutline
 } from 'ionicons/icons';
+import { podiumOutline } from 'ionicons/icons';
+
 
 @Component({
   selector: 'app-root',
@@ -49,15 +51,15 @@ import {
             </ion-menu-toggle>
 
             <ng-container *ngIf="p.submenu">
-              <ion-item (click)="toggleTeams()" detail="false" lines="none" button>
+              <ion-item (click)="toggleSubmenu(p.title)" detail="false" lines="none" button>
                 <ion-icon [name]="p.icon" slot="start"></ion-icon>
                 <ion-label>{{ p.title }}</ion-label>
-                <ion-icon [name]="showTeams ? 'chevron-down-outline' : 'chevron-forward-outline'" slot="end"></ion-icon>
+                <ion-icon [name]="isSubmenuOpen(p.title) ? 'chevron-down-outline' : 'chevron-forward-outline'" slot="end"></ion-icon>
               </ion-item>
 
-              <ion-list class="submenu-list" *ngIf="showTeams">
+              <ion-list class="submenu-list" *ngIf="isSubmenuOpen(p.title)">
                 <ion-menu-toggle auto-hide="false" *ngFor="let team of p.submenu">
-                  <ion-item [routerLink]="['/team', team.code]" routerLinkActive="selected" lines="none" detail="false">
+                  <ion-item [routerLink]="[p.teamRoute, team.code]" routerLinkActive="selected" lines="none" detail="false">
                     <ion-label class="submenu-label">{{ team.label }}</ion-label>
                   </ion-item>
                 </ion-menu-toggle>
@@ -78,7 +80,7 @@ import {
     </ion-menu>
 
     <div class="ion-page" id="main-content">
-      <ion-header [translucent]="true">
+      <ion-header [translucent]="true" *ngIf="!isHomePage">
         <ion-toolbar color="primary">
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
@@ -103,14 +105,16 @@ export class AppComponent implements OnInit {
 
   public environment = environment;
   public installPrompt = signal<any>(null);
-  public showTeams = false;
+  public openSubmenu: string | null = null;
+  public isHomePage = false;
 
   public appPages = [
+    { title: 'Home', url: '/home', icon: 'home-outline' },
     { title: 'Clubnieuws', url: '/news', icon: 'newspaper-outline' },
     { title: 'Nevobo Nieuws', url: '/nevobo-nieuws', icon: 'trophy-outline' },
     { title: 'Programma', url: '/programma', icon: 'calendar-outline' },
     { title: 'Thuis Wedstrijden', url: '/waddenhal', icon: 'business-outline' },
-    { title: 'Uitslagen', url: '/teams', icon: 'people-outline', submenu: [
+    { title: 'Uitslagen', url: '/teams', icon: 'people-outline', teamRoute: '/team', submenu: [
       { code: 'HS1', label: 'Heren 1' },
       { code: 'HS2', label: 'Heren 2' },
       { code: 'DS1', label: 'Dames 1' },
@@ -119,18 +123,33 @@ export class AppComponent implements OnInit {
       { code: 'MA1', label: 'Meisjes A1' },
       { code: 'MC1', label: 'Meisjes C1' }
     ] },
+    { title: 'Standen', url: '/standen', icon: 'podium-outline', teamRoute: '/standen', submenu: [
+    { code: 'HS1', label: 'Heren 1' },
+    { code: 'HS2', label: 'Heren 2' },
+    { code: 'DS1', label: 'Dames 1' },
+    { code: 'DS2', label: 'Dames 2' },
+    { code: 'XB1', label: 'Mix B1' },
+    { code: 'MA1', label: 'Meisjes A1' },
+    { code: 'MC1', label: 'Meisjes C1' }
+    // Let op: De Volley Stars staan vaak niet in de Nevobo standenlijst,
+    // dus die kun je hier eventueel weglaten.
+  ] },
     { title: 'Info', url: '/info', icon: 'globe-outline' }
   ];
 
   constructor() {
+    this.updateRouteState(this.router.url);
+
     // Luister naar navigatie: klap submenu in zodra de pagina wijzigt
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      this.showTeams = false;
+    ).subscribe((event) => {
+      this.openSubmenu = null;
+      this.updateRouteState(event.urlAfterRedirects);
     });
 
     addIcons({
+      'home-outline': homeOutline,
       'newspaper-outline': newspaperOutline,
       'trophy-outline': trophyOutline,
       'calendar-outline': calendarOutline,
@@ -139,7 +158,8 @@ export class AppComponent implements OnInit {
       'download-outline': downloadOutline,
       'people-outline': peopleOutline,
       'chevron-down-outline': chevronDownOutline,
-      'chevron-forward-outline': chevronForwardOutline
+      'chevron-forward-outline': chevronForwardOutline,
+      'podium-outline': podiumOutline
     });
   }
 
@@ -158,8 +178,16 @@ export class AppComponent implements OnInit {
     });
   }
 
-  toggleTeams() {
-    this.showTeams = !this.showTeams;
+  toggleSubmenu(menuTitle: string) {
+    this.openSubmenu = this.openSubmenu === menuTitle ? null : menuTitle;
+  }
+
+  isSubmenuOpen(menuTitle: string) {
+    return this.openSubmenu === menuTitle;
+  }
+
+  private updateRouteState(url: string) {
+    this.isHomePage = url === '/home' || url === '/';
   }
 
   installApp(): void {
