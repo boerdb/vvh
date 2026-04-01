@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AsyncPipe, NgFor, DatePipe, NgIf } from '@angular/common';
+import { AsyncPipe, NgFor, DatePipe } from '@angular/common';
 import { TeamService } from '../services/team.service';
-import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonContent, IonButton } from '@ionic/angular/standalone';
+import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonContent } from '@ionic/angular/standalone';
 import { Observable, map, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-team-resultaten',
   standalone: true,
-  imports: [AsyncPipe, NgFor, DatePipe, NgIf, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonContent, IonButton],
+  imports: [AsyncPipe, NgFor, DatePipe, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonContent],
   template: `
     <ion-content class="ion-padding">
       <div class="programma-container">
@@ -20,7 +20,6 @@ import { Observable, map, switchMap } from 'rxjs';
           </ion-card-header>
           <ion-card-content>
             <div class="match-description" [innerHTML]="wedstrijd.omschrijving"></div>
-            <ion-button *ngIf="wedstrijd.link" [href]="wedstrijd.link" target="_blank" expand="block">Meer info</ion-button>
           </ion-card-content>
         </ion-card>
       </div>
