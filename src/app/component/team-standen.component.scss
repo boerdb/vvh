@@ -183,3 +183,26 @@ ion-card-content {
     color: #c7d3ef;
   }
 }
+
+.stand-table tbody tr.poule-divider-row td {
+  background: linear-gradient(90deg, #1f4db3 0%, #2d63cc 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.72rem 0.8rem;
+  border-top: 2px solid #ffb300;
+  border-bottom: 2px solid #ffb300;
+}
+
+.stand-table tbody tr.poule-divider-row.poule-main-row td {
+  background: linear-gradient(90deg, #0f3f9f 0%, #1f56bd 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .stand-table tbody tr.poule-divider-row td {
+    background: linear-gradient(90deg, #153b8d 0%, #2556b5 100%);
+    color: #f8fbff;
+  }
+}

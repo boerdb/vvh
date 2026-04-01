@@ -45,13 +45,25 @@ import { Observable, map, switchMap } from 'rxjs';
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let row of vm.rows" [ngClass]="{'highlight-vvh': row.isVVH}">
-                  <td>{{ row.rank }}</td>
-                  <td>{{ row.team }}</td>
-                  <td>{{ row.wedstrijden }}</td>
-                  <td>{{ row.punten }}</td>
-                  <td>{{ row.sets }}</td>
+                <tr *ngIf="vm.hasStandRows" class="poule-divider-row poule-main-row">
+                  <td colspan="5">Reguliere competitie</td>
                 </tr>
+
+                <ng-container *ngFor="let row of vm.rows">
+
+                  <tr *ngIf="row.isDivider" class="poule-divider-row">
+                    <td colspan="5">{{ row.titel }}</td>
+                  </tr>
+
+                  <tr *ngIf="!row.isDivider" [ngClass]="{'highlight-vvh': row.isVVH}">
+                    <td>{{ row.rank }}</td>
+                    <td>{{ row.team }}</td>
+                    <td>{{ row.wedstrijden }}</td>
+                    <td>{{ row.punten }}</td>
+                    <td>{{ row.sets }}</td>
+                  </tr>
+
+                </ng-container>
               </tbody>
             </table>
           </ion-card-content>
@@ -67,7 +79,7 @@ export class TeamStandenComponent {
 
   public teamCode = '';
   public teamCodeLabel = '';
-  public vm$: Observable<{ rows: any[]; vvhRank: string; vvhPoints: string }>;
+  public vm$: Observable<{ rows: any[]; vvhRank: string; vvhPoints: string; hasStandRows: boolean }>;
 
   constructor() {
     this.vm$ = this.route.paramMap.pipe(
@@ -78,11 +90,13 @@ export class TeamStandenComponent {
         return this.teamService.getStanden(code);
       }),
       map(rows => {
-        const vvhRow = rows.find(row => row.isVVH);
+        // We zoeken de eerste echte VVH stand op (en negeren de divider-kopjes) voor het blok bovenaan
+        const vvhRow = rows.find(row => row.isVVH && !row.isDivider);
         return {
           rows,
           vvhRank: vvhRow?.rank ?? '-',
-          vvhPoints: vvhRow?.punten ?? '-'
+          vvhPoints: vvhRow?.punten ?? '-',
+          hasStandRows: rows.some(row => !row.isDivider)
         };
       })
     );

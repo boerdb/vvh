@@ -170,16 +170,37 @@ ion-card-content {
   margin-bottom: 5px;
 }
 
-.match-card h3 {
-  margin: 0 0 5px;
-  color: #1976d2;
+.match-card ion-card-title {
+  --color: #1976d2;
   font-size: 1.1rem;
   font-weight: 700;
 }
 
-.match-card p {
-  margin: 0 0 10px;
+.match-card ion-card-subtitle {
+  --color: #ffb300;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.locatie-tag {
+  color: #4e6382;
+  margin-left: 0.3rem;
+  font-weight: 700;
+}
+
+.match-description {
+  font-size: 0.98rem;
   color: #333;
+  background: #fffde7;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.match-card ion-button {
+  --background: #1976d2;
+  --color: #ffffff;
 }
 
 ion-button.cta-small {

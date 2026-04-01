@@ -30,7 +30,6 @@ export class TeamService {
 // VOLLEDIG GEAUTOMATISEERDE STANDEN LEZER (Via Proxy & XLSX)
   getStanden(teamCode: string): Observable<any[]> {
     if (!teamCode || teamCode === 'undefined') {
-      console.error('Fout: Geen geldige teamcode doorgekregen!');
       return of([]);
     }
 
@@ -47,37 +46,46 @@ export class TeamService {
 
         let isCorrectTeam = false;
         let standenLijst: any[] = [];
+        let tabelTeller = 1; // Houdt bij hoeveel tabellen we van dit team hebben gevonden
 
         for (let i = 0; i < rows.length; i++) {
           const row = rows[i];
+          if (!row || row.length === 0) continue;
+
           const firstCell = String(row[0] || '').trim();
 
-          // Controleer of we de titel van ons team vinden
+          // Hebben we ons team gevonden?
           if (firstCell.startsWith(searchString) || firstCell.startsWith(`"${searchString}`)) {
-            // BEVEILIGING 1: Als we al een tabel hebben gelezen en we komen de teamnaam
-            // NOG een keer tegen (bijv. voor een 2e seizoenshelft), stop dan direct!
-            if (standenLijst.length > 0) break;
+
+            // Als we al een eerdere tabel hebben ingelezen, is dit dus een extra poule (bijv. play-offs)
+            if (standenLijst.length > 0) {
+              tabelTeller++;
+              // Voeg een speciaal scheidingsobject toe aan de lijst
+              standenLijst.push({
+                isDivider: true,
+                titel: tabelTeller === 2 ? 'Nacompetitie / Play-offs' : `Extra Poule ${tabelTeller}`
+              });
+            }
 
             isCorrectTeam = true;
             continue;
           }
 
           if (isCorrectTeam) {
-            // BEVEILIGING 2: Stop als we bij een heel ander VVH team aankomen
+            // Stop helemaal als we bij een ánder VVH team aankomen
             if (firstCell.startsWith('V.V.H.') && !firstCell.startsWith(searchString)) break;
 
-            // BEVEILIGING 3: Nevobo zet een lege regel tussen tabellen.
-            // Als we al standen verzameld hebben en we zien een lege regel, is deze tabel klaar!
-            if ((!row || row.length === 0 || firstCell === '' || firstCell === 'undefined') && standenLijst.length > 0) {
-              break;
+            // Lege regel gevonden? Dan is DEZE tabel klaar. We pauzeren het inlezen (isCorrectTeam = false),
+            // maar de 'for-loop' gaat wel door met zoeken naar de volgende tabel van dit team!
+            if (firstCell === '' || firstCell === 'undefined') {
+               isCorrectTeam = false;
+               continue;
             }
 
-            // Sla lege regels (voorafgaand aan de tabel) en de header-rij over
-            if (!row || row.length === 0 || firstCell === '' || firstCell === 'undefined' || firstCell === 'Ranking') {
-              continue;
-            }
+            // Sla de header-rij met titels over
+            if (firstCell === 'Ranking') continue;
 
-            // We checken of de eerste cel écht een getal is (de Ranking), dan pas toevoegen
+            // Voeg de rij toe als het een geldig nummer is
             if (row.length >= 6 && /^\d+$/.test(firstCell)) {
               standenLijst.push({
                 rank: row[0],
