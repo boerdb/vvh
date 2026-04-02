@@ -57,13 +57,13 @@ export class TeamService {
           // Hebben we ons team gevonden?
           if (firstCell.startsWith(searchString) || firstCell.startsWith(`"${searchString}`)) {
 
-            // Als we al een eerdere tabel hebben ingelezen, is dit dus een extra poule (bijv. play-offs)
+              // Als we al een eerdere tabel hebben ingelezen, is dit dus een extra poule (bijv. bekercompetitie)
             if (standenLijst.length > 0) {
               tabelTeller++;
               // Voeg een speciaal scheidingsobject toe aan de lijst
               standenLijst.push({
                 isDivider: true,
-                titel: tabelTeller === 2 ? 'Nacompetitie / Play-offs' : `Extra Poule ${tabelTeller}`
+                  titel: tabelTeller === 2 ? 'Beker competitie' : `Extra Poule ${tabelTeller}`
               });
             }
 
