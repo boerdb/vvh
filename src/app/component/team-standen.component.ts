@@ -18,8 +18,8 @@ import { Observable, map, switchMap } from 'rxjs';
 
           <div class="meta-grid">
             <div class="meta-item">
-              <span class="meta-label">Categorie</span>
-              <strong class="meta-value">{{ teamCodeLabel }}</strong>
+              <span class="meta-label">Poule</span>
+              <strong class="meta-value">{{ vm.pouleNaam }}</strong>
             </div>
             <div class="meta-item">
               <span class="meta-label">VVH positie</span>
@@ -79,7 +79,8 @@ export class TeamStandenComponent {
 
   public teamCode = '';
   public teamCodeLabel = '';
-  public vm$: Observable<{ rows: any[]; vvhRank: string; vvhPoints: string; hasStandRows: boolean }>;
+  // De Observable verwacht nu ook een pouleNaam string
+  public vm$: Observable<{ rows: any[]; vvhRank: string; vvhPoints: string; hasStandRows: boolean; pouleNaam: string }>;
 
   constructor() {
     this.vm$ = this.route.paramMap.pipe(
@@ -87,16 +88,23 @@ export class TeamStandenComponent {
       switchMap(code => {
         this.teamCode = code;
         this.teamCodeLabel = this.formatTeamCode(code);
+        // We roepen de vernieuwde service aan die nu { standen, poule } teruggeeft
         return this.teamService.getStanden(code);
       }),
-      map(rows => {
+      map((result: any) => {
+        // We pakken de standen en de poule uit het resultaat van de service
+        const rows = result.standen || [];
+        const poule = result.poule || `Poule onbekend`;
+
         // We zoeken de eerste echte VVH stand op (en negeren de divider-kopjes) voor het blok bovenaan
-        const vvhRow = rows.find(row => row.isVVH && !row.isDivider);
+        const vvhRow = rows.find((row: any) => row.isVVH && !row.isDivider);
+
         return {
           rows,
           vvhRank: vvhRow?.rank ?? '-',
           vvhPoints: vvhRow?.punten ?? '-',
-          hasStandRows: rows.some(row => !row.isDivider)
+          hasStandRows: rows.some((row: any) => !row.isDivider),
+          pouleNaam: poule
         };
       })
     );

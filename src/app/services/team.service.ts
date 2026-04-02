@@ -5,9 +5,37 @@ import * as XLSX from 'xlsx';
 
 @Injectable({ providedIn: 'root' })
 export class TeamService {
-  // Moderne injectie in plaats van constructor parameters
   private http = inject(HttpClient);
   private readonly PROXY = 'https://weer.benswebradio.nl/proxy.php';
+
+  private normalizeStandenTeamCode(teamCode: string): string {
+    const normalizedCode = String(teamCode || '').trim().toUpperCase().replace(/\s+/g, '');
+    const match = normalizedCode.match(/^([A-Z]+)(\d+)$/);
+
+    if (!match) {
+      return String(teamCode || '').trim();
+    }
+
+    return `V.V.H. ${match[1]} ${match[2]}`;
+  }
+
+  private extractPouleFromTitleRow(row: any[], searchString: string): string {
+    const cleanedCells = (row || [])
+      .map(cell => String(cell ?? '').replace(/"/g, '').trim())
+      .filter(cell => cell.length > 0);
+
+    if (cleanedCells.length === 0) {
+      return '';
+    }
+
+    const inlineTitle = cleanedCells.find(cell => cell.startsWith(searchString) && cell.length > searchString.length);
+    if (inlineTitle) {
+      return inlineTitle.slice(searchString.length).replace(/^[\s-,:;]+/, '').trim();
+    }
+
+    const separateTitle = cleanedCells.find(cell => cell !== searchString && !/^ranking$/i.test(cell));
+    return separateTitle || '';
+  }
 
   getTeamProgramma(teamCode: string): Observable<any[]> {
     return this.http.get(`${this.PROXY}?team=${teamCode.toUpperCase()}`, { responseType: 'text' }).pipe(
@@ -27,10 +55,10 @@ export class TeamService {
     );
   }
 
-// VOLLEDIG GEAUTOMATISEERDE STANDEN LEZER (Via Proxy & XLSX)
-  getStanden(teamCode: string): Observable<any[]> {
+  // VOLLEDIG GEAUTOMATISEERDE STANDEN LEZER MET POULE HERKENNING
+  getStanden(teamCode: string): Observable<{ standen: any[], poule: string }> {
     if (!teamCode || teamCode === 'undefined') {
-      return of([]);
+      return of({ standen: [], poule: '' });
     }
 
     return this.http.get(`${this.PROXY}?type=standen`, { responseType: 'arraybuffer' }).pipe(
@@ -41,29 +69,32 @@ export class TeamService {
         const worksheet = workbook.Sheets[firstSheetName];
         const rows: any[][] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-        const match = teamCode.match(/([a-zA-Z]+)(\d+)/);
-        const searchString = match ? `V.V.H. ${match[1].toUpperCase()} ${match[2]}` : teamCode;
+        const searchString = this.normalizeStandenTeamCode(teamCode);
 
         let isCorrectTeam = false;
         let standenLijst: any[] = [];
-        let tabelTeller = 1; // Houdt bij hoeveel tabellen we van dit team hebben gevonden
+        let tabelTeller = 1;
+        let gevondenPoule = ''; // Hierin slaan we de poule op!
 
         for (let i = 0; i < rows.length; i++) {
           const row = rows[i];
           if (!row || row.length === 0) continue;
 
           const firstCell = String(row[0] || '').trim();
+          const isTeamTitleRow = firstCell.startsWith(searchString) || firstCell.startsWith(`"${searchString}`);
 
-          // Hebben we ons team gevonden?
-          if (firstCell.startsWith(searchString) || firstCell.startsWith(`"${searchString}`)) {
+          if (isTeamTitleRow) {
 
-              // Als we al een eerdere tabel hebben ingelezen, is dit dus een extra poule (bijv. bekercompetitie)
+            // Bewaar alleen de eerste gevonden hoofdpoule voor de kop van de pagina.
+            if (!gevondenPoule) {
+              gevondenPoule = this.extractPouleFromTitleRow(row, searchString);
+            }
+
             if (standenLijst.length > 0) {
               tabelTeller++;
-              // Voeg een speciaal scheidingsobject toe aan de lijst
               standenLijst.push({
                 isDivider: true,
-                  titel: tabelTeller === 2 ? 'Beker competitie' : `Extra Poule ${tabelTeller}`
+                titel: tabelTeller === 2 ? 'Beker competitie' : `Extra Poule ${tabelTeller}`
               });
             }
 
@@ -72,20 +103,15 @@ export class TeamService {
           }
 
           if (isCorrectTeam) {
-            // Stop helemaal als we bij een ánder VVH team aankomen
             if (firstCell.startsWith('V.V.H.') && !firstCell.startsWith(searchString)) break;
 
-            // Lege regel gevonden? Dan is DEZE tabel klaar. We pauzeren het inlezen (isCorrectTeam = false),
-            // maar de 'for-loop' gaat wel door met zoeken naar de volgende tabel van dit team!
             if (firstCell === '' || firstCell === 'undefined') {
                isCorrectTeam = false;
                continue;
             }
 
-            // Sla de header-rij met titels over
             if (firstCell === 'Ranking') continue;
 
-            // Voeg de rij toe als het een geldig nummer is
             if (row.length >= 6 && /^\d+$/.test(firstCell)) {
               standenLijst.push({
                 rank: row[0],
@@ -99,11 +125,11 @@ export class TeamService {
           }
         }
 
-        return standenLijst;
+        return { standen: standenLijst, poule: gevondenPoule };
       })
     );
   }
-  // Hulpmethode voor het verwerken van de XML feeds (Programma & Resultaten)
+
   private parseItems(xmlString: string): any[] {
     const startIndex = xmlString.indexOf('<');
     if (startIndex === -1) throw new Error('Geen XML');
@@ -114,14 +140,12 @@ export class TeamService {
     const items = Array.from(xml.querySelectorAll('item'));
 
     return items.map(item => {
-      // Datum verwerking
       const pubDate = item.querySelector('pubDate')?.textContent;
       let datumObject = null;
       if (pubDate) {
         datumObject = new Date(pubDate);
       }
 
-      // Link verwerking
       let link = item.querySelector('link')?.textContent || '';
       const guid = item.querySelector('guid')?.textContent || '';
       if (!link && guid && guid.startsWith('http')) {
